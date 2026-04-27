@@ -710,6 +710,18 @@ function parseRSS(xml, channelId){
       const thumb   = videoId ? `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg` : '';
       const views   = parseInt(e.querySelector('statistics')?.getAttribute('views')||'0')||0;
 
+      // ── Filter out Shorts ──────────────────────────────────
+      // 1. Duration: YouTube Shorts are <= 60 seconds
+      const durSec = parseInt(e.querySelector('duration')?.getAttribute('seconds') || '0') || 0;
+      if(durSec > 0 && durSec <= 60) return null;
+
+      // 2. Title contains #shorts / #short (case-insensitive)
+      if(/\#shorts?\b/i.test(title)) return null;
+
+      // 3. URL path contains /shorts/
+      if(link.includes('/shorts/')) return null;
+      // ──────────────────────────────────────────────────────
+
       return { id:videoId, title, published, url:link, thumb, views, channelId, channelName:feedTitle };
     })
     .filter(Boolean);
