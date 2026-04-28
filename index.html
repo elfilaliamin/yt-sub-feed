@@ -12,6 +12,7 @@
   --red:#ff4444; --orange:#ff7c2a; --green:#22c55e;
   --text:#efefef; --t2:#a0a0a0; --t3:#606060;
   --r:9px; --font:'Inter',sans-serif;
+  --card-min: 280px; /* controlled by zoom slider */
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{color-scheme:dark;}
@@ -20,7 +21,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--b2);border-radius:3px;}
 
-/* PROGRESS BAR */
+/* ── PROGRESS BAR ── */
 #pbar{
   position:fixed;top:0;left:0;height:2px;z-index:999;
   background:linear-gradient(90deg,var(--red),var(--orange));
@@ -30,37 +31,34 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
 }
 #pbar.on{opacity:1;}
 
-/* HEADER */
+/* ── HEADER ── */
 header{
   position:sticky;top:0;z-index:100;
   background:rgba(15,15,15,.96);backdrop-filter:blur(12px);
   border-bottom:1px solid var(--b1);
-  height:56px;padding:0 20px;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  height:56px;padding:0 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
 }
 .logo{font-size:17px;font-weight:700;letter-spacing:-.4px;white-space:nowrap;flex-shrink:0;}
 .logo em{color:var(--red);font-style:normal;}
 .search-wrap{
-  flex:1;max-width:360px;
+  flex:1;max-width:340px;
   display:flex;align-items:center;
   background:var(--s2);border:1px solid var(--b1);border-radius:6px;overflow:hidden;
 }
 #searchInput{
   flex:1;background:none;border:none;outline:none;
-  padding:7px 12px;font-size:13px;color:var(--text);font-family:var(--font);
+  padding:7px 11px;font-size:13px;color:var(--text);font-family:var(--font);
 }
 #searchInput::placeholder{color:var(--t3);}
-#searchClear{
-  padding:0 10px;color:var(--t3);cursor:pointer;font-size:15px;line-height:1;
-  display:none;transition:color .1s;
-}
+#searchClear{padding:0 9px;color:var(--t3);cursor:pointer;font-size:15px;line-height:1;display:none;}
 #searchClear:hover{color:var(--text);}
-.hdr-right{display:flex;gap:8px;align-items:center;flex-shrink:0;}
+.hdr-right{display:flex;gap:7px;align-items:center;flex-shrink:0;}
 
-/* BUTTONS */
+/* ── BUTTONS ── */
 .btn{
   display:inline-flex;align-items:center;gap:5px;
-  padding:7px 13px;border-radius:6px;border:none;
+  padding:7px 12px;border-radius:6px;border:none;
   font-family:var(--font);font-size:13px;font-weight:500;
   cursor:pointer;transition:all .12s;white-space:nowrap;line-height:1;
 }
@@ -69,13 +67,14 @@ header{
 .btn-red:hover{background:#e03333;}
 .btn-ghost{background:var(--s2);color:var(--t2);border:1px solid var(--b1);}
 .btn-ghost:hover{background:var(--s3);color:var(--text);}
+.btn-icon{padding:7px;border-radius:6px;}
 
-/* LAYOUT */
+/* ── LAYOUT ── */
 .layout{display:flex;}
 
-/* SIDEBAR */
+/* ── SIDEBAR ── */
 .sidebar{
-  width:238px;flex-shrink:0;
+  width:236px;flex-shrink:0;
   background:var(--s1);border-right:1px solid var(--b1);
   position:sticky;top:56px;height:calc(100vh - 56px);
   overflow-y:auto;display:flex;flex-direction:column;
@@ -83,11 +82,11 @@ header{
 .sb-top{flex:1;padding:10px 0;}
 .sb-label{
   font-size:10px;font-weight:600;letter-spacing:1.2px;
-  color:var(--t3);text-transform:uppercase;padding:6px 16px 4px;
+  color:var(--t3);text-transform:uppercase;padding:6px 15px 4px;
 }
 .sb-item{
   display:flex;align-items:center;gap:9px;
-  padding:7px 14px;cursor:pointer;transition:background .1s;
+  padding:7px 13px;cursor:pointer;transition:background .1s;
   position:relative;user-select:none;
 }
 .sb-item:hover{background:var(--s2);}
@@ -96,14 +95,17 @@ header{
   content:'';position:absolute;left:0;top:4px;bottom:4px;
   width:3px;border-radius:0 2px 2px 0;background:var(--red);
 }
+/* Channel avatar — shows real image if available, falls back to colored initials */
 .sb-av{
-  width:26px;height:26px;border-radius:50%;
+  width:27px;height:27px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   font-size:10px;font-weight:700;color:#fff;flex-shrink:0;
+  overflow:hidden;
 }
+.sb-av img{width:100%;height:100%;object-fit:cover;display:block;}
 .sb-name{flex:1;font-size:12.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .sb-badge{font-size:10px;font-weight:600;color:var(--t3);flex-shrink:0;}
-.sb-err-dot{width:7px;height:7px;border-radius:50%;background:var(--orange);flex-shrink:0;title:"Last refresh failed";}
+.sb-err-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);flex-shrink:0;}
 .sb-x{
   opacity:0;background:none;border:none;color:var(--t3);
   cursor:pointer;font-size:14px;padding:1px 4px;line-height:1;
@@ -111,20 +113,21 @@ header{
 }
 .sb-item:hover .sb-x{opacity:1;}
 .sb-x:hover{color:var(--red);background:rgba(255,68,68,.12);}
-.sb-divider{height:1px;background:var(--b1);margin:8px 14px;}
-.sb-footer{padding:8px 14px 14px;}
-.sb-add-btn{
+.sb-divider{height:1px;background:var(--b1);margin:8px 13px;}
+.sb-footer{padding:8px 13px 14px;display:flex;flex-direction:column;gap:4px;}
+.sb-action-btn{
   display:flex;align-items:center;gap:7px;background:none;border:none;cursor:pointer;
   font-family:var(--font);font-size:12.5px;font-weight:500;
-  color:var(--t3);padding:7px 2px;width:100%;transition:color .1s;
+  color:var(--t3);padding:6px 2px;width:100%;transition:color .1s;
 }
-.sb-add-btn:hover{color:var(--red);}
+.sb-action-btn:hover{color:var(--text);}
+.sb-action-btn.add:hover{color:var(--red);}
 
-/* MAIN */
-main{flex:1;min-width:0;padding:20px 24px;}
+/* ── MAIN ── */
+main{flex:1;min-width:0;padding:18px 22px;}
 
-/* FILTER BAR */
-.fbar{display:flex;align-items:center;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+/* ── FILTER BAR ── */
+.fbar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
 .fbar-left{display:flex;gap:6px;flex-wrap:wrap;flex:1;}
 .pill{
   padding:5px 13px;border-radius:20px;font-size:12px;font-weight:500;
@@ -136,19 +139,39 @@ main{flex:1;min-width:0;padding:20px 24px;}
 .fbar-right{display:flex;align-items:center;gap:10px;}
 #feedMeta{font-size:12px;color:var(--t3);white-space:nowrap;}
 .sync-row{display:none;align-items:center;gap:6px;font-size:12px;color:var(--t3);}
-.spinner{
-  width:13px;height:13px;border-radius:50%;
-  border:2px solid var(--b2);border-top-color:var(--red);
-  animation:spin .6s linear infinite;flex-shrink:0;
-}
+.spinner{width:13px;height:13px;border-radius:50%;border:2px solid var(--b2);border-top-color:var(--red);animation:spin .6s linear infinite;flex-shrink:0;}
 @keyframes spin{to{transform:rotate(360deg);}}
 
-/* GRID */
+/* ── ZOOM CONTROL ── */
+.zoom-wrap{
+  display:flex;align-items:center;gap:7px;
+  padding:4px 10px;border-radius:6px;border:1px solid var(--b1);
+  background:var(--s2);
+}
+.zoom-wrap svg{color:var(--t3);flex-shrink:0;}
+#zoomSlider{
+  -webkit-appearance:none;appearance:none;
+  width:80px;height:3px;border-radius:2px;outline:none;cursor:pointer;
+  background:var(--b2);
+}
+#zoomSlider::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:13px;height:13px;border-radius:50%;
+  background:var(--red);cursor:pointer;
+  border:2px solid var(--bg);
+}
+#zoomSlider::-moz-range-thumb{
+  width:13px;height:13px;border-radius:50%;
+  background:var(--red);cursor:pointer;border:2px solid var(--bg);
+}
+
+/* ── GRID ── */
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-  gap:16px;
+  grid-template-columns:repeat(auto-fill,minmax(var(--card-min),1fr));
+  gap:15px;
 }
+/* Card text scales with card size via clamp */
 .vcard{
   background:var(--s1);border:1px solid var(--b1);border-radius:var(--r);
   overflow:hidden;cursor:pointer;
@@ -160,7 +183,7 @@ main{flex:1;min-width:0;padding:20px 24px;}
 .vcard:hover .thumb img{transform:scale(1.04);}
 .thumb{position:relative;aspect-ratio:16/9;background:var(--s2);overflow:hidden;}
 .thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .2s ease;}
-.thumb-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:38px;}
+.thumb-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:clamp(24px,5vw,42px);}
 .badge-new{
   position:absolute;top:7px;left:7px;
   background:var(--red);color:#fff;
@@ -170,37 +193,41 @@ main{flex:1;min-width:0;padding:20px 24px;}
 .badge-age{
   position:absolute;bottom:6px;right:6px;
   background:rgba(0,0,0,.82);color:rgba(255,255,255,.88);
-  font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;
+  font-size:clamp(9px,1.1vw,11px);font-weight:600;padding:2px 7px;border-radius:4px;
 }
-.cinfo{padding:11px 13px;}
-.ctop{display:flex;gap:9px;}
+.cinfo{padding:clamp(8px,1.2vw,12px) clamp(9px,1.4vw,14px);}
+.ctop{display:flex;gap:8px;}
+/* Card channel avatar — real image */
 .cav{
-  width:30px;height:30px;border-radius:50%;
+  width:clamp(26px,3vw,34px);height:clamp(26px,3vw,34px);border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:700;color:#fff;flex-shrink:0;margin-top:1px;
+  font-size:clamp(9px,1vw,12px);font-weight:700;color:#fff;flex-shrink:0;margin-top:1px;
+  overflow:hidden;
 }
+.cav img{width:100%;height:100%;object-fit:cover;display:block;}
 .cbody{flex:1;min-width:0;}
 .ctitle{
-  font-size:13px;font-weight:600;line-height:1.35;color:var(--text);margin-bottom:3px;
+  font-size:clamp(11px,1.3vw,14px);font-weight:600;line-height:1.35;color:var(--text);margin-bottom:3px;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
 }
-.cch{font-size:11.5px;color:var(--t2);font-weight:500;}
-.ctime{font-size:11px;color:var(--t3);margin-top:2px;}
+.cch{font-size:clamp(10px,1.1vw,12px);color:var(--t2);font-weight:500;}
+.ctime{font-size:clamp(9px,1vw,11px);color:var(--t3);margin-top:2px;}
 .ctag{
-  display:inline-block;margin-top:6px;
-  padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;
+  display:inline-block;margin-top:5px;
+  padding:2px 7px;border-radius:4px;
+  font-size:clamp(9px,1vw,10px);font-weight:600;
 }
 .ctag-hot  {background:rgba(255,68,68,.13);color:var(--red);}
 .ctag-today{background:rgba(255,124,42,.13);color:var(--orange);}
 .ctag-week {background:rgba(255,255,255,.06);color:var(--t3);}
 
-/* EMPTY */
+/* ── EMPTY ── */
 .empty{text-align:center;padding:60px 20px;}
 .empty-icon{font-size:48px;margin-bottom:14px;}
 .empty h2{font-size:17px;font-weight:600;color:var(--t2);margin-bottom:7px;}
 .empty p{font-size:13px;color:var(--t3);line-height:1.6;max-width:300px;margin:0 auto 20px;}
 
-/* MODAL */
+/* ── MODAL OVERLAY ── */
 .overlay{
   position:fixed;inset:0;z-index:200;
   background:rgba(0,0,0,.76);backdrop-filter:blur(5px);
@@ -228,12 +255,10 @@ main{flex:1;min-width:0;padding:20px 24px;}
 .merr{min-height:18px;font-size:11.5px;color:var(--red);margin:7px 0 2px;line-height:1.5;white-space:pre-wrap;}
 .mfooter{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;}
 
-/* RESOLVE STEPS — shows progress while resolving */
+/* resolve steps */
 .resolve-steps{
   background:var(--s2);border:1px solid var(--b1);border-radius:7px;
-  padding:11px 14px;margin-top:13px;
-  font-size:11.5px;color:var(--t3);line-height:2;
-  display:none;
+  padding:11px 14px;margin-top:13px;font-size:11.5px;color:var(--t3);line-height:2;display:none;
 }
 .resolve-steps.visible{display:block;}
 .step{display:flex;align-items:center;gap:7px;}
@@ -241,23 +266,35 @@ main{flex:1;min-width:0;padding:20px 24px;}
 .step.done .step-icon::after{content:'✓';color:var(--green);}
 .step.fail .step-icon::after{content:'✗';color:var(--red);}
 .step.wait .step-icon::after{content:'·';color:var(--t3);}
-.step.run  .step-icon{display:flex;align-items:center;justify-content:center;}
-.step.run  .step-icon::after{content:'';}
+.step.run .step-icon{display:flex;align-items:center;justify-content:center;}
+.step.run .step-icon::after{content:'';}
 .step-spin{width:11px;height:11px;border-radius:50%;border:2px solid var(--b2);border-top-color:var(--orange);animation:spin .5s linear infinite;}
 .step-txt{color:var(--t2);}
 .step.done .step-txt{color:var(--t3);}
 
-/* INFO BOX */
+/* info box */
 .info-box{
   background:var(--s2);border:1px solid var(--b1);border-radius:7px;
-  padding:11px 14px;margin-top:13px;
-  font-size:11.5px;color:var(--t3);line-height:1.75;
+  padding:11px 14px;margin-top:13px;font-size:11.5px;color:var(--t3);line-height:1.75;
 }
 .info-box strong{color:var(--t2);}
 .info-box a{color:var(--red);text-decoration:none;}
 .info-box a:hover{text-decoration:underline;}
 
-/* TOAST */
+/* import/export modal specifics */
+#impExpModal .modal{width:420px;}
+.imp-exp-btns{display:flex;flex-direction:column;gap:10px;margin-top:6px;}
+.imp-exp-row{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--s2);border:1px solid var(--b1);border-radius:8px;
+  padding:13px 15px;
+}
+.imp-exp-row .label{font-size:13px;font-weight:500;color:var(--text);}
+.imp-exp-row .sublabel{font-size:11.5px;color:var(--t3);margin-top:2px;}
+.imp-exp-result{font-size:12px;color:var(--green);margin-top:10px;min-height:18px;}
+#importFile{display:none;}
+
+/* ── TOAST ── */
 #toast{
   position:fixed;bottom:20px;right:20px;z-index:300;
   background:var(--s3);border:1px solid var(--b2);
@@ -272,9 +309,9 @@ main{flex:1;min-width:0;padding:20px 24px;}
 
 @media(max-width:760px){
   .sidebar{display:none;}
-  main{padding:14px;}
-  .grid{grid-template-columns:1fr 1fr;gap:10px;}
+  main{padding:12px;}
   .search-wrap{max-width:none;}
+  .zoom-wrap{display:none;}
 }
 @media(max-width:440px){.grid{grid-template-columns:1fr;}}
 </style>
@@ -283,6 +320,7 @@ main{flex:1;min-width:0;padding:20px 24px;}
 
 <div id="pbar"></div>
 <div id="toast"></div>
+<input type="file" id="importFile" accept=".json" onchange="importChannels(this)">
 
 <!-- ═══ HEADER ═══ -->
 <header>
@@ -295,6 +333,13 @@ main{flex:1;min-width:0;padding:20px 24px;}
   </div>
 
   <div class="hdr-right">
+    <!-- Zoom slider -->
+    <div class="zoom-wrap" title="Card size">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <input type="range" id="zoomSlider" min="180" max="480" value="280" step="10" oninput="onZoom(this.value)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    </div>
+
     <button class="btn btn-ghost" id="refreshBtn" onclick="refreshAll()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
@@ -322,11 +367,18 @@ main{flex:1;min-width:0;padding:20px 24px;}
     </div>
     <div class="sb-footer">
       <div class="sb-divider"></div>
-      <button class="sb-add-btn" onclick="openModal()">
+      <button class="sb-action-btn add" onclick="openModal()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
         </svg>
         Add channel
+      </button>
+      <button class="sb-action-btn" onclick="openImpExp()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/>
+          <path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/>
+        </svg>
+        Import / Export
       </button>
     </div>
   </aside>
@@ -361,7 +413,7 @@ main{flex:1;min-width:0;padding:20px 24px;}
 </div>
 
 <!-- ═══ ADD CHANNEL MODAL ═══ -->
-<div class="overlay" id="overlay" onclick="bgClick(event)">
+<div class="overlay" id="overlay" onclick="bgClick(event,'overlay')">
   <div class="modal">
     <h2>Add a Channel</h2>
     <p class="modal-hint">
@@ -375,16 +427,13 @@ main{flex:1;min-width:0;padding:20px 24px;}
       onkeydown="if(event.key==='Enter') doAdd()"
       oninput="document.getElementById('merr').textContent=''">
     <div class="merr" id="merr"></div>
-
-    <!-- Live resolution progress -->
     <div class="resolve-steps" id="resolveSteps">
       <div class="step wait" id="step1"><span class="step-icon"></span><span class="step-txt" id="step1txt">Parsing URL…</span></div>
       <div class="step wait" id="step2"><span class="step-icon"></span><span class="step-txt" id="step2txt">Looking up channel ID…</span></div>
       <div class="step wait" id="step3"><span class="step-icon"></span><span class="step-txt" id="step3txt">Fetching RSS feed…</span></div>
     </div>
-
     <div class="mfooter">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-ghost" onclick="closeModal('overlay')">Cancel</button>
       <button class="btn btn-red" id="addBtn" onclick="doAdd()">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
@@ -392,11 +441,53 @@ main{flex:1;min-width:0;padding:20px 24px;}
         Add
       </button>
     </div>
-
     <div class="info-box">
       <strong>Handle not resolving?</strong>
       Paste the <code>UC…</code> channel ID directly — it always works.<br>
       Find it at <a href="https://commentpicker.com/youtube-channel-id.php" target="_blank">commentpicker.com/youtube-channel-id.php</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ IMPORT / EXPORT MODAL ═══ -->
+<div class="overlay" id="impExpModal" onclick="bgClick(event,'impExpModal')">
+  <div class="modal" style="width:420px">
+    <h2>Import / Export Channels</h2>
+    <p class="modal-hint" style="margin-bottom:14px">
+      Export saves your channel list as a <code>.json</code> file.<br>
+      Import merges channels from a previously exported file.
+    </p>
+    <div class="imp-exp-btns">
+      <div class="imp-exp-row">
+        <div>
+          <div class="label">Export channels</div>
+          <div class="sublabel">Download your subscriptions as JSON</div>
+        </div>
+        <button class="btn btn-ghost" onclick="exportChannels()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Export
+        </button>
+      </div>
+      <div class="imp-exp-row">
+        <div>
+          <div class="label">Import channels</div>
+          <div class="sublabel">Merge from a SubFeed JSON file</div>
+        </div>
+        <button class="btn btn-ghost" onclick="document.getElementById('importFile').click()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          Import
+        </button>
+      </div>
+    </div>
+    <div class="imp-exp-result" id="impExpResult"></div>
+    <div class="mfooter">
+      <button class="btn btn-ghost" onclick="closeModal('impExpModal')">Close</button>
     </div>
   </div>
 </div>
@@ -409,14 +500,11 @@ main{flex:1;min-width:0;padding:20px 24px;}
 // ═══════════════════════════════════════════════════════════
 const LS_CH       = 'sf5_ch';
 const LS_VID      = 'sf5_vid';
+const LS_ZOOM     = 'sf5_zoom';
 const MONTH_MS    = 30 * 24 * 60 * 60 * 1000;
 const MAX_STORE   = 600;
-const CONCURRENCY = 4;   // parallel channel fetches during refresh
+const CONCURRENCY = 4;
 
-// ── Invidious instances  ──────────────────────────────────
-// These are open-source YouTube frontends with public APIs and CORS headers.
-// They can resolve @handles to the CORRECT channel ID using YouTube's own data.
-// We try them all in parallel — first valid response wins.
 const INVIDIOUS = [
   'https://invidious.kavin.rocks',
   'https://inv.nadeko.net',
@@ -428,7 +516,6 @@ const INVIDIOUS = [
   'https://invidio.xamh.de',
 ];
 
-// ── CORS proxy pool (fallback when Invidious fails) ───────
 const CORS_PROXIES = [
   u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
   u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
@@ -441,16 +528,16 @@ const CORS_PROXIES = [
 // ═══════════════════════════════════════════════════════════
 let channels = [], videos = [], filter = 'month', chFilter = null, searchQ = '';
 
-function loadState() {
-  try { channels = JSON.parse(localStorage.getItem(LS_CH)  || '[]'); } catch { channels = []; }
-  try { videos   = JSON.parse(localStorage.getItem(LS_VID) || '[]'); } catch { videos   = []; }
+function loadState(){
+  try { channels = JSON.parse(localStorage.getItem(LS_CH)  || '[]'); } catch { channels=[]; }
+  try { videos   = JSON.parse(localStorage.getItem(LS_VID) || '[]'); } catch { videos=[];   }
 }
-function saveState() {
+function saveState(){
   try {
     localStorage.setItem(LS_CH,  JSON.stringify(channels));
     localStorage.setItem(LS_VID, JSON.stringify(videos));
   } catch {
-    videos = videos.slice(0, 300);
+    videos = videos.slice(0,300);
     try {
       localStorage.setItem(LS_CH,  JSON.stringify(channels));
       localStorage.setItem(LS_VID, JSON.stringify(videos));
@@ -461,7 +548,7 @@ function saveState() {
 // ═══════════════════════════════════════════════════════════
 //  VISUAL HELPERS
 // ═══════════════════════════════════════════════════════════
-const PAL = ['#e74c3c','#e67e22','#2ecc71','#3498db','#9b59b6','#1abc9c','#e91e63','#00bcd4','#ff5722','#607d8b'];
+const PAL=['#e74c3c','#e67e22','#2ecc71','#3498db','#9b59b6','#1abc9c','#e91e63','#00bcd4','#ff5722','#607d8b'];
 function chColor(id){ let h=0; for(const c of String(id)) h=(h*31+c.charCodeAt(0))&0x7fffffff; return PAL[h%PAL.length]; }
 function initials(n){ return (n||'?').split(/\s+/).map(w=>w[0]||'').join('').slice(0,2).toUpperCase(); }
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -479,14 +566,59 @@ function relTime(d){
 }
 function ageDays(d){ return (Date.now()-new Date(d).getTime())/86400000; }
 function tagClass(d){ const h=ageDays(d)*24; return h<6?'ctag-hot':h<24?'ctag-today':'ctag-week'; }
+
+// "Today" = from midnight of the current calendar day (in local timezone), not "last 24h"
+function startOfToday(){
+  const d = new Date();
+  d.setHours(0,0,0,0);
+  return d.getTime();
+}
 function passesFilter(d){
-  const dy=ageDays(d);
-  if(filter==='today') return dy<=1;
-  if(filter==='week')  return dy<=7;
-  if(filter==='month') return dy<=30;
+  const t = new Date(d).getTime();
+  const dy = ageDays(d);
+  if(filter==='today') return t >= startOfToday();   // ← calendar day, not rolling 24h
+  if(filter==='week')  return dy <= 7;
+  if(filter==='month') return dy <= 30;
   return true;
 }
+
 function fmtViews(n){ if(!n)return''; if(n>=1e6)return(n/1e6).toFixed(1)+'M views'; if(n>=1e3)return Math.round(n/1e3)+'K views'; return n+' views'; }
+
+// Channel avatar URL — YouTube hosts these at a predictable path via yt3.ggpht.com
+// We store it when we first parse the channel page via Invidious (which returns thumbnails)
+function chAvatarUrl(ch){
+  const url = ch.avatar || '';
+  // Only use if it's a proper absolute URL (img src must be absolute)
+  if(url.startsWith('https://') || url.startsWith('http://')) return url;
+  return '';
+}
+
+function avatarHtml(ch, cls=''){
+  const url = chAvatarUrl(ch);
+  const color = chColor(ch.id);
+  const ini   = initials(ch.name);
+  if(url){
+    return `<div class="${cls}" style="background:${color}">
+      <img src="${esc(url)}" alt="" onerror="this.parentNode.innerHTML='${ini}';this.parentNode.style.background='${color}'">
+    </div>`;
+  }
+  return `<div class="${cls}" style="background:${color}">${ini}</div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  ZOOM
+// ═══════════════════════════════════════════════════════════
+function onZoom(val){
+  document.documentElement.style.setProperty('--card-min', val+'px');
+  try { localStorage.setItem(LS_ZOOM, val); } catch {}
+}
+function loadZoom(){
+  const saved = localStorage.getItem(LS_ZOOM);
+  if(saved){
+    document.getElementById('zoomSlider').value = saved;
+    onZoom(saved);
+  }
+}
 
 // ═══════════════════════════════════════════════════════════
 //  PROGRESS BAR & TOAST & SYNC
@@ -495,7 +627,7 @@ function pbar(pct){
   const el=document.getElementById('pbar');
   el.style.width=pct+'%';
   if(pct>0) el.classList.add('on'); else el.classList.remove('on');
-  if(pct>=100){ setTimeout(()=>{ el.style.width='0%'; el.classList.remove('on'); },500); }
+  if(pct>=100) setTimeout(()=>{ el.style.width='0%'; el.classList.remove('on'); },500);
 }
 let _tt;
 function toast(msg,type='ok'){
@@ -504,30 +636,22 @@ function toast(msg,type='ok'){
   clearTimeout(_tt); _tt=setTimeout(()=>{ el.className='toast'; },3600);
 }
 function setSyncTxt(txt){
-  document.getElementById('syncRow').style.display = txt ? 'flex' : 'none';
+  document.getElementById('syncRow').style.display=txt?'flex':'none';
   if(txt) document.getElementById('syncTxt').textContent=txt;
 }
 
 // ═══════════════════════════════════════════════════════════
-//  STEP INDICATOR (inside modal)
+//  STEP INDICATOR
 // ═══════════════════════════════════════════════════════════
-function stepState(id, state, txt){
-  const el = document.getElementById(id);
-  if(!el) return;
-  el.className = 'step ' + state;
-  if(txt) document.getElementById(id+'txt').textContent = txt;
-  if(state === 'run'){
-    el.querySelector('.step-icon').innerHTML = '<div class="step-spin"></div>';
-  } else {
-    el.querySelector('.step-icon').innerHTML = '';
-  }
+function stepState(id,state,txt){
+  const el=document.getElementById(id); if(!el)return;
+  el.className='step '+state;
+  if(txt) document.getElementById(id+'txt').textContent=txt;
+  el.querySelector('.step-icon').innerHTML = state==='run'?'<div class="step-spin"></div>':'';
 }
 function showSteps(){ document.getElementById('resolveSteps').classList.add('visible'); }
 function hideSteps(){ document.getElementById('resolveSteps').classList.remove('visible'); }
 function resetSteps(){
-  ['step1','step2','step3'].forEach(id => {
-    stepState(id,'wait');
-  });
   stepState('step1','wait','Parsing URL…');
   stepState('step2','wait','Looking up channel ID…');
   stepState('step3','wait','Fetching RSS feed…');
@@ -536,14 +660,11 @@ function resetSteps(){
 // ═══════════════════════════════════════════════════════════
 //  FETCH HELPERS
 // ═══════════════════════════════════════════════════════════
-
-// Race proxies in parallel — first valid text response wins
-async function proxyFetch(url, timeoutMs=10000){
-  return new Promise((resolve, reject)=>{
+async function proxyFetch(url, ms=10000){
+  return new Promise((resolve,reject)=>{
     let won=false, left=CORS_PROXIES.length;
     CORS_PROXIES.forEach(fn=>{
-      const ctrl=new AbortController();
-      const t=setTimeout(()=>ctrl.abort(), timeoutMs);
+      const ctrl=new AbortController(), t=setTimeout(()=>ctrl.abort(),ms);
       fetch(fn(url),{signal:ctrl.signal})
         .then(async r=>{
           clearTimeout(t);
@@ -552,347 +673,338 @@ async function proxyFetch(url, timeoutMs=10000){
           if(!text||text.length<30) throw new Error('empty');
           if(!won){ won=true; resolve(text); }
         })
-        .catch(()=>{ clearTimeout(t); left--; if(left===0&&!won) reject(new Error('All proxies failed: '+url)); });
+        .catch(()=>{ clearTimeout(t); left--; if(left===0&&!won) reject(new Error('All proxies failed')); });
     });
   });
 }
 
-// Race Invidious instances in parallel for channel resolution
-// Returns { channelId, channelName } or throws
+// Returns { channelId, channelName, avatar } via Invidious
 async function invidiousResolve(handle){
-  return new Promise((resolve, reject)=>{
+  return new Promise((resolve,reject)=>{
     let won=false, left=INVIDIOUS.length;
     INVIDIOUS.forEach(base=>{
-      const url=`${base}/api/v1/channels/${encodeURIComponent(handle)}`;
-      const ctrl=new AbortController();
-      const t=setTimeout(()=>ctrl.abort(), 12000);
-      fetch(url,{signal:ctrl.signal})
+      const ctrl=new AbortController(), t=setTimeout(()=>ctrl.abort(),12000);
+      fetch(`${base}/api/v1/channels/${encodeURIComponent(handle)}`,{signal:ctrl.signal})
         .then(async r=>{
           clearTimeout(t);
           if(!r.ok) throw new Error('HTTP '+r.status);
-          const json=await r.json();
-          // Invidious returns { authorId, author, ... }
-          const id   = json.authorId || json.channelId;
-          const name = json.author   || json.channelName || '';
-          if(!id || !id.startsWith('UC')) throw new Error('no channelId in response');
-          if(!won){ won=true; resolve({ channelId:id, channelName:name }); }
+          const j=await r.json();
+          const id=j.authorId||j.channelId;
+          if(!id||!id.startsWith('UC')) throw new Error('no channelId');
+
+          // Pick the largest avatar thumbnail Invidious provides
+          const thumbs = j.authorThumbnails || [];
+          thumbs.sort((a,b)=>(b.width||0)-(a.width||0));
+          let avatar = thumbs[0]?.url || '';
+
+          // Invidious sometimes returns relative URLs like /ggpht/ytc%2FHASH
+          // Convert those to absolute yt3.ggpht.com URLs (img tags can load these cross-origin)
+          if(avatar.startsWith('/')){
+            // Try to decode the proxied path back to original yt3 URL
+            // Pattern: /ggpht/ytc%2FHASH  ->  https://yt3.ggpht.com/ytc/HASH
+            const decoded = decodeURIComponent(avatar.replace(/^\/ggpht\//, ''));
+            if(decoded.startsWith('ytc/') || decoded.startsWith('=')) {
+              avatar = 'https://yt3.ggpht.com/' + decoded;
+            } else {
+              // Fallback: prepend the responding Invidious base
+              avatar = base + avatar;
+            }
+          }
+          // Ensure https
+          if(avatar.startsWith('//')) avatar = 'https:' + avatar;
+
+          if(!won){ won=true; resolve({ channelId:id, channelName:j.author||'', avatar }); }
         })
-        .catch(()=>{ clearTimeout(t); left--; if(left===0&&!won) reject(new Error('Invidious resolve failed for: '+handle)); });
+        .catch(()=>{ clearTimeout(t); left--; if(left===0&&!won) reject(new Error('Invidious failed')); });
     });
   });
 }
 
-// ═══════════════════════════════════════════════════════════
-//  URL / HANDLE PARSING
-// ═══════════════════════════════════════════════════════════
-function parseInput(raw){
-  raw = raw.trim().replace(/\/+$/, '');
-
-  // 1. Bare UC… id
-  if(/^UC[\w-]{20,}$/.test(raw)) return { type:'id', value:raw };
-
-  // 2. youtube.com/channel/UCxxx
-  let m = raw.match(/youtube\.com\/channel\/(UC[\w-]{20,})/i);
-  if(m) return { type:'id', value:m[1] };
-
-  // 3. youtube.com/@handle  (handles accented/unicode chars too)
-  m = raw.match(/youtube\.com\/@([^/?&\s]+)/i);
-  if(m) return { type:'handle', value:m[1] };
-
-  // 4. youtube.com/c/name  or  youtube.com/user/name
-  m = raw.match(/youtube\.com\/(?:c\/|user\/)([^/?&\s]+)/i);
-  if(m) return { type:'handle', value:m[1] };
-
-  // 5. Bare @handle
-  m = raw.match(/^@([^/?&\s]+)$/);
-  if(m) return { type:'handle', value:m[1] };
-
-  // 6. Plain word/name (no @ or URL — treat as handle)
-  m = raw.match(/^([\w.-]{2,80})$/);
-  if(m) return { type:'handle', value:m[1] };
-
-  return null;
+// Fetch avatar for a channel that was added without one (e.g. via direct UC ID)
+// Tries Invidious with the channel ID — same resolution path
+async function fetchAvatarForChannel(ch){
+  if(ch.avatar) return; // already have it
+  try {
+    const result = await invidiousResolve(ch.id);
+    if(result.avatar){ ch.avatar = result.avatar; saveState(); renderSidebar(); }
+  } catch(e){ /* silent — initials fallback already shown */ }
 }
 
 // ═══════════════════════════════════════════════════════════
-//  CHANNEL RESOLUTION  (3-tier approach)
+//  URL PARSING
 // ═══════════════════════════════════════════════════════════
+function parseInput(raw){
+  raw=raw.trim().replace(/\/+$/,'');
+  if(/^UC[\w-]{20,}$/.test(raw)) return {type:'id',value:raw};
+  let m=raw.match(/youtube\.com\/channel\/(UC[\w-]{20,})/i);
+  if(m) return {type:'id',value:m[1]};
+  m=raw.match(/youtube\.com\/@([^/?&\s]+)/i);
+  if(m) return {type:'handle',value:m[1]};
+  m=raw.match(/youtube\.com\/(?:c\/|user\/)([^/?&\s]+)/i);
+  if(m) return {type:'handle',value:m[1]};
+  m=raw.match(/^@([^/?&\s]+)$/);
+  if(m) return {type:'handle',value:m[1]};
+  m=raw.match(/^([\w.-]{2,80})$/);
+  if(m) return {type:'handle',value:m[1]};
+  return null;
+}
+
 function rssUrl(id){ return `https://www.youtube.com/feeds/videos.xml?channel_id=${id}`; }
 
 async function resolveToChannelId(handle){
-  // ── TIER 1: Invidious API ─────────────────────────────
-  // Most accurate: Invidious talks to YouTube's real API internally,
-  // resolves @handles correctly without any scraping ambiguity.
-  try {
-    const result = await invidiousResolve(handle);
-    return result; // { channelId, channelName }
-  } catch(e) {
-    console.warn('[Invidious] all instances failed, trying scrape fallback…', e.message);
-  }
+  // Tier 1: Invidious API — most accurate, also gives us the avatar
+  try { return await invidiousResolve(handle); } catch(e){ console.warn('[Inv]',e.message); }
 
-  // ── TIER 2: Scrape via CORS proxy — look for RSS <link> tag ──────────
-  // We target the specific <link rel="alternate"> tag YouTube puts in <head>.
-  // This tag contains the exact channel_id for THIS page, not any random UC ID.
-  // Much more reliable than searching for any UC… string in the page.
-  const pageUrls = [
+  // Tier 2: scrape — look for RSS link tag specifically
+  const pageUrls=[
     `https://www.youtube.com/@${handle}`,
     `https://www.youtube.com/c/${handle}`,
     `https://www.youtube.com/user/${handle}`,
   ];
-
-  const htmlResults = await Promise.allSettled(
-    pageUrls.map(u => proxyFetch(u, 12000))
-  );
-
-  for(const r of htmlResults){
-    if(r.status !== 'fulfilled') continue;
-    const html = r.value;
-
-    // PRIMARY: RSS alternate link — the gold standard for this page's channel ID
-    let m = html.match(/<link[^>]+type="application\/rss\+xml"[^>]+href="[^"]*channel_id=(UC[\w-]{20,})/i);
-    if(m) return { channelId: m[1], channelName: '' };
-    // Also try reversed attribute order
-    m = html.match(/feeds\/videos\.xml\?channel_id=(UC[\w-]{20,})/);
-    if(m) return { channelId: m[1], channelName: '' };
-
-    // SECONDARY: ytInitialData header — the channel's own data object
-    m = html.match(/"channelMetadataRenderer"\s*:\s*\{[^}]*"externalId"\s*:\s*"(UC[\w-]{20,})"/);
-    if(m) return { channelId: m[1], channelName: '' };
-
-    // TERTIARY: canonical link
-    m = html.match(/<link rel="canonical"[^>]+href="[^"]*\/channel\/(UC[\w-]{20,})"/i);
-    if(m) return { channelId: m[1], channelName: '' };
+  const results=await Promise.allSettled(pageUrls.map(u=>proxyFetch(u,12000)));
+  for(const r of results){
+    if(r.status!=='fulfilled') continue;
+    const html=r.value;
+    let m=html.match(/feeds\/videos\.xml\?channel_id=(UC[\w-]{20,})/);
+    if(m) return {channelId:m[1],channelName:'',avatar:''};
+    m=html.match(/"channelMetadataRenderer"[^}]*"externalId"\s*:\s*"(UC[\w-]{20,})"/);
+    if(m) return {channelId:m[1],channelName:'',avatar:''};
+    m=html.match(/<link rel="canonical"[^>]+\/channel\/(UC[\w-]{20,})"/i);
+    if(m) return {channelId:m[1],channelName:'',avatar:''};
   }
-
-  throw new Error(
-    `Could not resolve "@${handle}".\n` +
-    `Paste the UC… Channel ID directly instead.\n` +
-    `Find it: commentpicker.com/youtube-channel-id.php`
-  );
+  throw new Error(`Could not resolve "@${handle}".\nPaste the UC… Channel ID directly.\nFind it: commentpicker.com/youtube-channel-id.php`);
 }
 
 async function resolveChannel(raw){
-  const parsed = parseInput(raw);
-  if(!parsed) throw new Error('Could not understand that input.\nUse @handle, youtube.com/@channel, or a UC… channel ID.');
-
-  if(parsed.type === 'id'){
-    return { channelId: parsed.value, channelName: '', url: rssUrl(parsed.value) };
-  }
-
-  const { channelId, channelName } = await resolveToChannelId(parsed.value);
-  return { channelId, channelName, url: rssUrl(channelId) };
+  const p=parseInput(raw);
+  if(!p) throw new Error('Could not understand that input.\nUse @handle, youtube.com/@channel, or a UC… ID.');
+  if(p.type==='id') return {channelId:p.value,channelName:'',avatar:'',url:rssUrl(p.value)};
+  const {channelId,channelName,avatar}=await resolveToChannelId(p.value);
+  return {channelId,channelName,avatar,url:rssUrl(channelId)};
 }
 
 // ═══════════════════════════════════════════════════════════
-//  RSS PARSING  — only keep videos from last 30 days
+//  RSS PARSING  — last 30 days, no Shorts
 // ═══════════════════════════════════════════════════════════
 function parseRSS(xml, channelId){
-  const doc = new DOMParser().parseFromString(xml, 'application/xml');
+  const doc=new DOMParser().parseFromString(xml,'application/xml');
   if(doc.querySelector('parsererror')) throw new Error('Invalid XML');
-
-  const feedTitle = (
-    doc.querySelector('author name')?.textContent ||
-    doc.querySelector('title')?.textContent || ''
+  const feedTitle=(
+    doc.querySelector('author name')?.textContent||
+    doc.querySelector('title')?.textContent||''
   ).replace(/^Videos from /i,'').trim();
 
-  const cutoff = Date.now() - MONTH_MS;
+  const cutoff=Date.now()-MONTH_MS;
 
-  const items = [...doc.querySelectorAll('entry')]
-    .map(e => {
-      const published = e.querySelector('published')?.textContent || '';
-      if(!published || new Date(published).getTime() < cutoff) return null;
+  const items=[...doc.querySelectorAll('entry')].map(e=>{
+    const published=e.querySelector('published')?.textContent||'';
+    if(!published||new Date(published).getTime()<cutoff) return null;
 
-      const videoId = e.querySelector('videoId')?.textContent
-        || (e.querySelector('id')?.textContent || '').split(':').pop();
-      const title   = e.querySelector('title')?.textContent || '';
-      const link    = e.querySelector('link')?.getAttribute('href')
-        || (videoId ? `https://youtube.com/watch?v=${videoId}` : '');
-      const thumb   = videoId ? `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg` : '';
-      const views   = parseInt(e.querySelector('statistics')?.getAttribute('views')||'0')||0;
+    const videoId=e.querySelector('videoId')?.textContent||(e.querySelector('id')?.textContent||'').split(':').pop();
+    const title  =e.querySelector('title')?.textContent||'';
+    const link   =e.querySelector('link')?.getAttribute('href')||(videoId?`https://youtube.com/watch?v=${videoId}`:'');
+    const thumb  =videoId?`https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`:'';
+    const views  =parseInt(e.querySelector('statistics')?.getAttribute('views')||'0')||0;
 
-      // ── Filter out Shorts ──────────────────────────────────
-      // 1. Duration: YouTube Shorts are <= 60 seconds
-      const durSec = parseInt(e.querySelector('duration')?.getAttribute('seconds') || '0') || 0;
-      if(durSec > 0 && durSec <= 60) return null;
+    // ── Filter Shorts ──
+    const durSec=parseInt(e.querySelector('duration')?.getAttribute('seconds')||'0')||0;
+    if(durSec>0&&durSec<=60) return null;
+    if(/\#shorts?\b/i.test(title)) return null;
+    if(link.includes('/shorts/')) return null;
 
-      // 2. Title contains #shorts / #short (case-insensitive)
-      if(/\#shorts?\b/i.test(title)) return null;
+    return {id:videoId,title,published,url:link,thumb,views,channelId,channelName:feedTitle};
+  }).filter(Boolean);
 
-      // 3. URL path contains /shorts/
-      if(link.includes('/shorts/')) return null;
-      // ──────────────────────────────────────────────────────
-
-      return { id:videoId, title, published, url:link, thumb, views, channelId, channelName:feedTitle };
-    })
-    .filter(Boolean);
-
-  return { feedTitle, items };
+  return {feedTitle,items};
 }
 
 // ═══════════════════════════════════════════════════════════
 //  ADD CHANNEL
 // ═══════════════════════════════════════════════════════════
 async function doAdd(){
-  const input  = document.getElementById('chInput');
-  const errEl  = document.getElementById('merr');
-  const addBtn = document.getElementById('addBtn');
-  errEl.textContent = '';
+  const input=document.getElementById('chInput');
+  const errEl=document.getElementById('merr');
+  errEl.textContent='';
+  const raw=input.value.trim();
+  if(!raw){ errEl.textContent='Enter a channel handle or URL.'; return; }
 
-  const raw = input.value.trim();
-  if(!raw){ errEl.textContent = 'Enter a channel handle or URL.'; return; }
+  setAddLoading('Working…'); showSteps(); resetSteps();
 
-  addBtn.disabled = true;
-  addBtn.innerHTML = '<div class="spinner" style="width:11px;height:11px;border-width:2px"></div> Working…';
-  showSteps(); resetSteps();
-
-  // Step 1: parse
   stepState('step1','run','Parsing URL…');
-  const parsed = parseInput(raw);
+  const parsed=parseInput(raw);
   if(!parsed){
-    errEl.textContent = 'Could not understand that input.\nUse @handle, a youtube.com URL, or a UC… channel ID.';
-    stepState('step1','fail','Parse failed');
-    resetAddBtn(); return;
+    errEl.textContent='Could not understand that input.\nUse @handle, a youtube.com URL, or a UC… ID.';
+    stepState('step1','fail','Parse failed'); resetAddBtn(); return;
   }
-  stepState('step1','done', parsed.type==='id' ? `Channel ID: ${parsed.value.slice(0,12)}…` : `Handle: @${parsed.value}`);
+  stepState('step1','done',parsed.type==='id'?`ID: ${parsed.value.slice(0,12)}…`:`Handle: @${parsed.value}`);
 
-  // Step 2: resolve
   let resolved;
-  if(parsed.type === 'id'){
+  if(parsed.type==='id'){
     stepState('step2','done','Direct channel ID — no lookup needed');
-    resolved = { channelId: parsed.value, channelName:'', url: rssUrl(parsed.value) };
+    resolved={channelId:parsed.value,channelName:'',avatar:'',url:rssUrl(parsed.value)};
   } else {
-    stepState('step2','run',`Looking up @${parsed.value} via Invidious API…`);
+    stepState('step2','run',`Resolving @${parsed.value}…`);
     try {
-      resolved = await resolveChannel(raw);
-      stepState('step2','done',`Resolved → ${resolved.channelId.slice(0,14)}…`);
+      resolved=await resolveChannel(raw);
+      stepState('step2','done',`→ ${resolved.channelId.slice(0,14)}…`);
     } catch(e){
-      errEl.textContent = e.message;
-      stepState('step2','fail','Could not resolve channel ID');
-      resetAddBtn(); return;
+      errEl.textContent=e.message; stepState('step2','fail','Could not resolve'); resetAddBtn(); return;
     }
   }
 
-  if(channels.find(c => c.id === resolved.channelId)){
-    errEl.textContent = 'Already subscribed to this channel.';
-    stepState('step3','fail','Already subscribed');
-    resetAddBtn(); return;
+  if(channels.find(c=>c.id===resolved.channelId)){
+    errEl.textContent='Already subscribed.'; stepState('step3','fail','Already subscribed'); resetAddBtn(); return;
   }
 
-  // Step 3: fetch feed
   stepState('step3','run','Fetching RSS feed…');
   let feedTitle, newItems;
   try {
-    const xml = await proxyFetch(resolved.url);
-    const p   = parseRSS(xml, resolved.channelId);
-    feedTitle = p.feedTitle || resolved.channelName || raw.replace(/^@/,'');
-    newItems  = p.items;
-    stepState('step3','done',`${newItems.length} video${newItems.length!==1?'s':''} in last 30 days`);
+    const xml=await proxyFetch(resolved.url);
+    const p=parseRSS(xml,resolved.channelId);
+    feedTitle=p.feedTitle||resolved.channelName||raw.replace(/^@/,'');
+    newItems=p.items;
+    stepState('step3','done',`${newItems.length} video${newItems.length!==1?'s':''} (last 30 days)`);
   } catch(e){
-    errEl.textContent = 'Got channel ID but RSS feed failed. Try again.';
-    stepState('step3','fail','RSS fetch failed');
-    resetAddBtn(); return;
+    errEl.textContent='Got channel ID but RSS feed failed. Try again.';
+    stepState('step3','fail','RSS failed'); resetAddBtn(); return;
   }
 
-  const ch = {
-    id:      resolved.channelId,
-    name:    feedTitle,
-    rssUrl:  resolved.url,
-    addedAt: new Date().toISOString(),
-    error:   false,
-  };
+  const ch={id:resolved.channelId,name:feedTitle,rssUrl:resolved.url,avatar:resolved.avatar||'',addedAt:new Date().toISOString(),error:false};
   channels.push(ch);
-
-  let added = 0;
-  for(const v of newItems){
-    if(!videos.find(x => x.id === v.id)){ videos.push(v); added++; }
-  }
-  sortVids();
-  saveState();
-  renderSidebar();
-  chFilter = null;
-  renderGrid();
-  closeModal();
-  input.value = '';
-  toast(`Added "${ch.name}" — ${added} video${added!==1?'s':''} (last 30 days)`);
+  let added=0;
+  for(const v of newItems) if(!videos.find(x=>x.id===v.id)){ videos.push(v); added++; }
+  sortVids(); saveState(); renderSidebar(); chFilter=null; renderGrid();
+  closeModal('overlay'); input.value='';
+  toast(`Added "${ch.name}" — ${added} video${added!==1?'s':''}`);
 }
 
+function setAddLoading(txt){
+  const b=document.getElementById('addBtn');
+  b.disabled=true;
+  b.innerHTML=`<div class="spinner" style="width:11px;height:11px;border-width:2px"></div> ${txt}`;
+}
 function resetAddBtn(){
-  const b = document.getElementById('addBtn');
-  b.disabled = false;
-  b.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add`;
+  const b=document.getElementById('addBtn');
+  b.disabled=false;
+  b.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add`;
 }
 
 // ═══════════════════════════════════════════════════════════
 //  REMOVE CHANNEL
 // ═══════════════════════════════════════════════════════════
-function removeChannel(e, id){
+function removeChannel(e,id){
   e.stopPropagation();
-  const ch = channels.find(c => c.id === id);
-  channels = channels.filter(c => c.id !== id);
-  videos   = videos.filter(v => v.channelId !== id);
-  if(chFilter === id) chFilter = null;
+  const ch=channels.find(c=>c.id===id);
+  channels=channels.filter(c=>c.id!==id);
+  videos=videos.filter(v=>v.channelId!==id);
+  if(chFilter===id) chFilter=null;
   saveState(); renderSidebar(); renderGrid();
   if(ch) toast(`Removed "${ch.name}"`, 'err');
 }
 
 // ═══════════════════════════════════════════════════════════
-//  REFRESH ALL  — parallel with concurrency cap
+//  REFRESH ALL
 // ═══════════════════════════════════════════════════════════
 async function refreshAll(){
   if(!channels.length){ openModal(); return; }
-
-  const btn = document.getElementById('refreshBtn');
-  btn.disabled = true;
-  setSyncTxt(`Refreshing ${channels.length} channels…`);
-  pbar(5);
-
-  const total  = channels.length;
-  let   done   = 0, added = 0, errors = 0;
-  const queue  = [...channels];
+  const btn=document.getElementById('refreshBtn');
+  btn.disabled=true; setSyncTxt(`Refreshing…`); pbar(5);
+  const total=channels.length;
+  let done=0,added=0,errors=0;
+  const queue=[...channels];
 
   async function worker(){
     while(queue.length){
-      const ch = queue.shift();
-      setSyncTxt(ch.name.length > 24 ? ch.name.slice(0,22)+'…' : ch.name);
+      const ch=queue.shift();
+      setSyncTxt(ch.name.length>24?ch.name.slice(0,22)+'…':ch.name);
       try {
-        const xml = await proxyFetch(ch.rssUrl, 12000);
-        const { feedTitle, items } = parseRSS(xml, ch.id);
-
-        if(feedTitle && feedTitle !== ch.name) ch.name = feedTitle;
-        ch.error = false;
-        ch.lastOk = new Date().toISOString();
-
-        // Remove this channel's stale videos then add fresh ones
-        const cutoff = Date.now() - MONTH_MS;
-        videos = videos.filter(v => v.channelId !== ch.id || new Date(v.published).getTime() >= cutoff);
-
-        for(const v of items){
-          if(!videos.find(x => x.id === v.id)){ videos.push(v); added++; }
-        }
-      } catch(e){
-        ch.error = true;
-        errors++;
-        console.warn('Feed error:', ch.name, e.message);
-      }
+        const xml=await proxyFetch(ch.rssUrl,12000);
+        const {feedTitle,items}=parseRSS(xml,ch.id);
+        if(feedTitle&&feedTitle!==ch.name) ch.name=feedTitle;
+        ch.error=false; ch.lastOk=new Date().toISOString();
+        // Opportunistically fetch avatar if missing
+        if(!ch.avatar) fetchAvatarForChannel(ch);
+        const cutoff=Date.now()-MONTH_MS;
+        videos=videos.filter(v=>v.channelId!==ch.id||new Date(v.published).getTime()>=cutoff);
+        for(const v of items) if(!videos.find(x=>x.id===v.id)){ videos.push(v); added++; }
+      } catch(e){ ch.error=true; errors++; console.warn('Feed error:',ch.name,e.message); }
       done++;
-      pbar(5 + (done / total) * 90);
+      pbar(5+(done/total)*90);
       renderSidebar();
     }
   }
-
-  await Promise.all(Array.from({ length: Math.min(CONCURRENCY, total) }, worker));
-
+  await Promise.all(Array.from({length:Math.min(CONCURRENCY,total)},worker));
   sortVids();
-  if(videos.length > MAX_STORE) videos = videos.slice(0, MAX_STORE);
-  saveState(); renderSidebar(); renderGrid();
-  pbar(100);
-  setSyncTxt('');
-  btn.disabled = false;
-
-  const parts = [`${total} channel${total!==1?'s':''} refreshed`];
+  if(videos.length>MAX_STORE) videos=videos.slice(0,MAX_STORE);
+  saveState(); renderSidebar(); renderGrid(); pbar(100); setSyncTxt(''); btn.disabled=false;
+  const parts=[`${total} channel${total!==1?'s':''} refreshed`];
   if(added)  parts.push(`${added} new`);
   if(errors) parts.push(`${errors} failed`);
-  toast(parts.join(' · '), errors && added===0 ? 'err' : 'ok');
+  toast(parts.join(' · '), errors&&added===0?'err':'ok');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  IMPORT / EXPORT
+// ═══════════════════════════════════════════════════════════
+function exportChannels(){
+  if(!channels.length){ toast('No channels to export','err'); return; }
+  const data={
+    exported: new Date().toISOString(),
+    version:  1,
+    channels: channels.map(ch=>({ id:ch.id, name:ch.name, rssUrl:ch.rssUrl, avatar:ch.avatar||'', addedAt:ch.addedAt })),
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=`subfeed-channels-${new Date().toISOString().slice(0,10)}.json`;
+  a.click(); URL.revokeObjectURL(url);
+  toast(`Exported ${channels.length} channels`);
+  document.getElementById('impExpResult').textContent=`✓ Exported ${channels.length} channels`;
+}
+
+async function importChannels(input){
+  const file=input.files[0]; if(!file) return;
+  const resultEl=document.getElementById('impExpResult');
+  resultEl.textContent='Reading file…';
+  try {
+    const text=await file.text();
+    const data=JSON.parse(text);
+    // Accept either { channels:[...] } format or a plain array
+    const list=Array.isArray(data)?data:(data.channels||[]);
+    if(!list.length) throw new Error('No channels found in file');
+
+    let added=0, skipped=0;
+    for(const ch of list){
+      if(!ch.id||!ch.rssUrl){ skipped++; continue; }
+      if(channels.find(c=>c.id===ch.id)){ skipped++; continue; }
+      channels.push({
+        id:      ch.id,
+        name:    ch.name||ch.id,
+        rssUrl:  ch.rssUrl,
+        avatar:  ch.avatar||'',
+        addedAt: ch.addedAt||new Date().toISOString(),
+        error:   false,
+      });
+      added++;
+    }
+    saveState(); renderSidebar(); renderGrid();
+    const msg=`Imported ${added} channel${added!==1?'s':''}${skipped?` (${skipped} skipped)`:''}`;
+    resultEl.style.color='var(--green)';
+    resultEl.textContent='✓ '+msg;
+    toast(msg);
+    if(added>0) toast(`${added} channel${added!==1?'s':''} imported — hit Refresh to load videos`,'inf');
+  } catch(e){
+    resultEl.style.color='var(--red)';
+    resultEl.textContent='✗ '+e.message;
+    toast('Import failed: '+e.message,'err');
+  }
+  input.value=''; // reset so same file can be re-imported
+}
+
+function openImpExp(){
+  document.getElementById('impExpResult').textContent='';
+  document.getElementById('impExpResult').style.color='var(--green)';
+  document.getElementById('impExpModal').classList.add('open');
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -901,18 +1013,19 @@ async function refreshAll(){
 function sortVids(){ videos.sort((a,b)=>new Date(b.published)-new Date(a.published)); }
 
 function renderSidebar(){
-  const el = document.getElementById('sbList');
+  const el=document.getElementById('sbList');
   if(!channels.length){
-    el.innerHTML = '<div style="padding:6px 16px;font-size:12px;color:var(--t3)">No channels yet.</div>';
+    el.innerHTML='<div style="padding:6px 16px;font-size:12px;color:var(--t3)">No channels yet.</div>';
     return;
   }
-  el.innerHTML = channels.map(ch => {
-    const cnt    = videos.filter(v => v.channelId === ch.id).length;
-    const active = chFilter === ch.id ? 'on' : '';
-    const err    = ch.error ? '<span class="sb-err-dot" title="Last refresh failed"></span>' : '';
+  el.innerHTML=channels.map(ch=>{
+    const cnt=videos.filter(v=>v.channelId===ch.id).length;
+    const active=chFilter===ch.id?'on':'';
+    const err=ch.error?'<span class="sb-err-dot" title="Last refresh failed"></span>':'';
+    const avHtml=avatarHtml(ch,'sb-av');
     return `
     <div class="sb-item ${active}" data-cid="${esc(ch.id)}" onclick="setCh('${esc(ch.id)}')">
-      <div class="sb-av" style="background:${chColor(ch.id)}">${initials(ch.name)}</div>
+      ${avHtml}
       <span class="sb-name" title="${esc(ch.name)}">${esc(ch.name)}</span>
       ${err}
       <span class="sb-badge">${cnt||''}</span>
@@ -922,68 +1035,68 @@ function renderSidebar(){
 }
 
 function renderGrid(){
-  const grid  = document.getElementById('grid');
-  const empty = document.getElementById('empty');
-  const meta  = document.getElementById('feedMeta');
+  const grid=document.getElementById('grid');
+  const empty=document.getElementById('empty');
+  const meta=document.getElementById('feedMeta');
 
-  let list = [...videos];
-  if(chFilter) list = list.filter(v => v.channelId === chFilter);
-  list = list.filter(v => passesFilter(v.published));
+  let list=[...videos];
+  if(chFilter) list=list.filter(v=>v.channelId===chFilter);
+  list=list.filter(v=>passesFilter(v.published));
 
   if(searchQ){
-    const q = searchQ.toLowerCase();
-    list = list.filter(v =>
-      v.title?.toLowerCase().includes(q) ||
+    const q=searchQ.toLowerCase();
+    list=list.filter(v=>
+      v.title?.toLowerCase().includes(q)||
       (channels.find(c=>c.id===v.channelId)?.name||'').toLowerCase().includes(q)
     );
   }
   list.sort((a,b)=>new Date(b.published)-new Date(a.published));
 
-  const chName = chFilter ? (channels.find(c=>c.id===chFilter)?.name||'') : null;
-  meta.textContent = `${list.length} video${list.length!==1?'s':''}`
-    + (chName ? ` · ${chName}` : '')
-    + (searchQ ? ` · "${searchQ}"` : '');
+  const chName=chFilter?(channels.find(c=>c.id===chFilter)?.name||''):null;
+  meta.textContent=`${list.length} video${list.length!==1?'s':''}`
+    +(chName?` · ${chName}`:'')+( searchQ?` · "${searchQ}"`:'');
 
   if(!list.length){
-    grid.innerHTML = '';
-    empty.style.display = 'block';
-    const [et,em,ei] = ['emptyTitle','emptyMsg','emptyIcon'].map(id=>document.getElementById(id));
+    grid.innerHTML=''; empty.style.display='block';
+    const [et,em,ei]=['emptyTitle','emptyMsg','emptyIcon'].map(id=>document.getElementById(id));
     if(!channels.length){
       ei.textContent='📭'; et.textContent='No channels yet';
       em.textContent='Add YouTube channels to build your personal subscription feed.';
     } else if(searchQ){
       ei.textContent='🔍'; et.textContent='No results';
       em.textContent=`No videos match "${searchQ}".`;
+    } else if(filter==='today'){
+      ei.textContent='📅'; et.textContent='Nothing published today';
+      em.textContent='No videos from today yet. Try "This Week" or hit Refresh.';
     } else if(filter!=='all'){
       ei.textContent='📅'; et.textContent='Nothing in this period';
-      em.textContent='Try "All Time" or hit Refresh to get the latest videos.';
+      em.textContent='Try "All Time" or hit Refresh.';
     } else {
       ei.textContent='⏳'; et.textContent='No videos stored';
       em.textContent='Hit Refresh to load the latest videos from your channels.';
     }
     return;
   }
-  empty.style.display = 'none';
+  empty.style.display='none';
 
-  grid.innerHTML = list.map((v,i)=>{
-    const ch    = channels.find(c=>c.id===v.channelId) || { name:v.channelName||'?', id:v.channelId||'' };
-    const color = chColor(ch.id);
-    const days  = ageDays(v.published);
-    const isNew = days < 1;
-    const ageLabel = days < 1 ? relTime(v.published) : Math.floor(days)+'d ago';
-
+  grid.innerHTML=list.map((v,i)=>{
+    const ch=channels.find(c=>c.id===v.channelId)||{name:v.channelName||'?',id:v.channelId||'',avatar:''};
+    const days=ageDays(v.published);
+    const isNew=days<1;
+    const ageLabel=days<1?relTime(v.published):Math.floor(days)+'d ago';
+    const avHtml=avatarHtml(ch,'cav');
     return `
     <div class="vcard" style="animation-delay:${Math.min(i,24)*0.023}s" onclick="openVid('${esc(v.url)}')">
       <div class="thumb">
-        ${v.thumb ? `<img src="${esc(v.thumb)}" loading="lazy" alt=""
-          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` : ''}
+        ${v.thumb?`<img src="${esc(v.thumb)}" loading="lazy" alt=""
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:'' }
         <div class="thumb-ph" style="${v.thumb?'display:none':''}">${vidEmoji(v.id||v.url)}</div>
-        ${isNew ? '<div class="badge-new">NEW</div>' : ''}
+        ${isNew?'<div class="badge-new">NEW</div>':''}
         <div class="badge-age">${ageLabel}</div>
       </div>
       <div class="cinfo">
         <div class="ctop">
-          <div class="cav" style="background:${color}">${initials(ch.name)}</div>
+          ${avHtml}
           <div class="cbody">
             <div class="ctitle">${esc(v.title)}</div>
             <div class="cch">${esc(ch.name)}</div>
@@ -1009,9 +1122,7 @@ function setFilter(f,el){
 }
 function setCh(id){
   chFilter=(chFilter===id)?null:id;
-  document.querySelectorAll('.sb-item').forEach(e=>
-    e.classList.toggle('on', e.dataset.cid===id && chFilter!==null)
-  );
+  document.querySelectorAll('.sb-item').forEach(e=>e.classList.toggle('on',e.dataset.cid===id&&chFilter!==null));
   renderGrid();
 }
 function onSearch(val){
@@ -1026,28 +1137,41 @@ function clearSearch(){
 }
 
 // ═══════════════════════════════════════════════════════════
-//  MODAL
+//  MODALS
 // ═══════════════════════════════════════════════════════════
 function openModal(){
   document.getElementById('overlay').classList.add('open');
   resetSteps(); hideSteps();
   setTimeout(()=>document.getElementById('chInput').focus(),150);
 }
-function closeModal(){
-  document.getElementById('overlay').classList.remove('open');
-  document.getElementById('merr').textContent='';
-  hideSteps(); resetSteps(); resetAddBtn();
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
+  if(id==='overlay'){
+    document.getElementById('merr').textContent='';
+    hideSteps(); resetSteps(); resetAddBtn();
+  }
 }
-function bgClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+function bgClick(e,id){ if(e.target===document.getElementById(id)) closeModal(id); }
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    closeModal('overlay');
+    closeModal('impExpModal');
+  }
+});
 
 // ═══════════════════════════════════════════════════════════
 //  BOOT
 // ═══════════════════════════════════════════════════════════
 loadState();
+loadZoom();
 sortVids();
 renderSidebar();
 renderGrid();
+
+// Silently fetch missing avatars for already-stored channels (background, non-blocking)
+setTimeout(()=>{
+  channels.filter(ch=>!ch.avatar).forEach(ch=>fetchAvatarForChannel(ch));
+}, 800);
 </script>
 </body>
 </html>
