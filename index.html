@@ -937,6 +937,11 @@ async function refreshAll(){
   sortVids();
   if(videos.length>MAX_STORE) videos=videos.slice(0,MAX_STORE);
   saveState(); renderSidebar(); renderGrid(); pbar(100); setSyncTxt(''); btn.disabled=false;
+
+  // Final sweep: fetch avatars for any channel still missing one
+  setTimeout(()=>{
+    channels.filter(ch=>!ch.avatar).forEach(ch=>fetchAvatarForChannel(ch));
+  }, 500);
   const parts=[`${total} channel${total!==1?'s':''} refreshed`];
   if(added)  parts.push(`${added} new`);
   if(errors) parts.push(`${errors} failed`);
@@ -1168,10 +1173,15 @@ sortVids();
 renderSidebar();
 renderGrid();
 
-// Silently fetch missing avatars for already-stored channels (background, non-blocking)
-setTimeout(()=>{
-  channels.filter(ch=>!ch.avatar).forEach(ch=>fetchAvatarForChannel(ch));
-}, 800);
+// Auto-refresh on page load so latest videos appear immediately
+if(channels.length){
+  refreshAll();
+} else {
+  // No channels yet — fetch avatars only
+  setTimeout(()=>{
+    channels.filter(ch=>!ch.avatar).forEach(ch=>fetchAvatarForChannel(ch));
+  }, 800);
+}
 </script>
 </body>
 </html>
